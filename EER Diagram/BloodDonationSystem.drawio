@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-11-04T15:54:59.123Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="lUk4yDeJxUZsFUCeiaJl" version="22.0.8" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2023-11-04T15:55:54.598Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36" etag="QeVzNCTJ4VNG2X3c5D5C" version="22.0.8" type="github" pages="2">
   <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
     <mxGraphModel dx="1244" dy="496" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" background="#FFE6CC" math="0" shadow="1" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
       <root>
@@ -199,17 +199,11 @@
         <mxCell id="LjBN4Qn5D7-HvQ0hQZ_H-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="LjBN4Qn5D7-HvQ0hQZ_H-36" target="LjBN4Qn5D7-HvQ0hQZ_H-39" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="LjBN4Qn5D7-HvQ0hQZ_H-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="LjBN4Qn5D7-HvQ0hQZ_H-36" target="LjBN4Qn5D7-HvQ0hQZ_H-37" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="ONDrYkihtajZO3aNgYlQ-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;shape=link;" edge="1" parent="1" source="LjBN4Qn5D7-HvQ0hQZ_H-36" target="ONDrYkihtajZO3aNgYlQ-37">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="LjBN4Qn5D7-HvQ0hQZ_H-36" value="MedicalHistory" style="whiteSpace=wrap;html=1;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
           <mxGeometry x="640" y="739" width="100" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="LjBN4Qn5D7-HvQ0hQZ_H-37" value="BloodInventoryID" style="ellipse;whiteSpace=wrap;html=1;align=center;fontStyle=4;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
-          <mxGeometry x="640" y="819" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="LjBN4Qn5D7-HvQ0hQZ_H-38" value="DiseasesFree (boolean)" style="ellipse;whiteSpace=wrap;html=1;align=center;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
           <mxGeometry x="500" y="739" width="100" height="40" as="geometry" />
@@ -285,7 +279,7 @@
         <mxCell id="AMj3o4mjBAUH1Wynp_XB-6" value="d" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1360" y="914" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ONDrYkihtajZO3aNgYlQ-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="AMj3o4mjBAUH1Wynp_XB-10" target="ONDrYkihtajZO3aNgYlQ-30">
+        <mxCell id="ONDrYkihtajZO3aNgYlQ-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;shape=link;" edge="1" parent="1" source="AMj3o4mjBAUH1Wynp_XB-10" target="ONDrYkihtajZO3aNgYlQ-30">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="AMj3o4mjBAUH1Wynp_XB-10" value="Recipient" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
