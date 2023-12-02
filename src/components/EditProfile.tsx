@@ -70,7 +70,6 @@ export default function EditProfile() {
                 <input
                 className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                 id="user-id"
-                type="number"
                 value={userId}
                 onChange={handleNumericInputChange(setUserId, 10)}
                 placeholder="User ID"
