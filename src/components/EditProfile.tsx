@@ -8,7 +8,6 @@ export default function EditProfile() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [bloodType, setBloodType] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
-  const [dobError, setDobError] = useState('');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
   const [address, setAddress] = useState('');
@@ -24,17 +23,14 @@ export default function EditProfile() {
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age_now--;
       }
-      if (age_now < 17) {
-        // Set error message instead of using alert
-        setDateOfBirth('');
-        setAge('');
-        setDobError('You must be at least 17 years old.');
-      } else {
-        setAge(age_now.toString());
-        setDobError(''); // Clear any existing error message
-      }
+      setAge(age_now);
     }
   }, [dateOfBirth]);
+
+  const getMaxDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
 
   const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -183,34 +179,31 @@ export default function EditProfile() {
 
             {/* Date of Birth and Age */}
             <div className="flex gap-4">
-              <div className="flex-1">
+                <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="date-of-birth">
-                  Date of Birth
+                    Date of Birth
                 </label>
                 <input
                     className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                     id="date-of-birth"
                     type="date"
+                    max={getMaxDate()} // Prevent future dates
                     value={dateOfBirth}
-                    onChange={(e) => {
-                        setDobError(''); // Clear error when changing the date
-                        setDateOfBirth(e.target.value);
-                    }}
-                    />
-                    {dobError && <p className="text-red-500 text-xs italic mt-2">{dobError}</p>}
-              </div>
-              <div className="flex-1">
+                    onChange={(e) => setDateOfBirth(e.target.value)}
+                />
+                </div>
+                <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="age">
-                  Age
+                    Age
                 </label>
                 <input
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
-                  id="age"
-                  type="text"
-                  value={age}
-                  disabled
+                    className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                    id="age"
+                    type="text"
+                    value={age}
+                    disabled
                 />
-              </div>
+                </div>
             </div>
 
             {/* Address */}
