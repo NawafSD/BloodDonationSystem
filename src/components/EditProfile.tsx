@@ -8,13 +8,12 @@ export default function EditProfile() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [bloodType, setBloodType] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
+  const [dobError, setDobError] = useState('');
   const [age, setAge] = useState('');
   const [weight, setWeight] = useState('');
   const [address, setAddress] = useState('');
   const [medicalHistory, setMedicalHistory] = useState('');
   const [otherMedicalHistory, setOtherMedicalHistory] = useState('');
-
-  const [dobError, setDobError] = useState('');
 
   useEffect(() => {
     if (dateOfBirth) {
@@ -37,6 +36,8 @@ export default function EditProfile() {
     }
   }, [dateOfBirth]);
 
+  const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
   const diseasesPreventingDonation = [
     'None',
     'Hepatitis B or C',
@@ -46,8 +47,6 @@ export default function EditProfile() {
     'Blood Cancers',
     'Other' // When 'Other' is selected, a text box will appear for the user to specify
   ];
-
-  // ... other handlers for form submission or state changes
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
@@ -151,13 +150,14 @@ export default function EditProfile() {
                   value={bloodType}
                   onChange={(e) => setBloodType(e.target.value)}
                 >
-                  {diseasesPreventingDonation.map((type) => (
+                 <option value="">Select Blood Type</option>
+                    {bloodTypes.map((type) => (
                     <option key={type} value={type}>
-                      {type}
+                        {type}
                     </option>
-                  ))}
+                    ))}
                 </select>
-              </div>
+                </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="weight">
                   Weight (kg)
