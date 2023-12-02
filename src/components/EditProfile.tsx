@@ -14,6 +14,8 @@ export default function EditProfile() {
   const [medicalHistory, setMedicalHistory] = useState('');
   const [otherMedicalHistory, setOtherMedicalHistory] = useState('');
 
+  const [dobError, setDobError] = useState('');
+
   useEffect(() => {
     if (dateOfBirth) {
       const today = new Date();
@@ -23,7 +25,15 @@ export default function EditProfile() {
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age_now--;
       }
-      setAge(age_now.toString());
+      if (age_now < 17) {
+        // Set error message instead of using alert
+        setDateOfBirth('');
+        setAge('');
+        setDobError('You must be at least 17 years old.');
+      } else {
+        setAge(age_now.toString());
+        setDobError(''); // Clear any existing error message
+      }
     }
   }, [dateOfBirth]);
 
@@ -170,12 +180,16 @@ export default function EditProfile() {
                   Date of Birth
                 </label>
                 <input
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
-                  id="date-of-birth"
-                  type="date"
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
-                />
+                    className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                    id="date-of-birth"
+                    type="date"
+                    value={dateOfBirth}
+                    onChange={(e) => {
+                        setDobError(''); // Clear error when changing the date
+                        setDateOfBirth(e.target.value);
+                    }}
+                    />
+                    {dobError && <p className="text-red-500 text-xs italic mt-2">{dobError}</p>}
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="age">
