@@ -1,0 +1,39 @@
+---
+const { title } = Astro.props
+import Nav from "../components/Nav.tsx"
+import Footer from "../components/Footer";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content=", "
+    />
+    <meta title={title} />
+  </head>
+  <body >
+    <main class="main-page">
+      <Nav client:load />
+      <slot />
+      
+     
+    </main>
+    <Footer />
+  </body>
+</html>
+
+
+<style>
+
+ html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    width: 100%;
+ }
+
+</style>
