@@ -1,154 +1,252 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function EditProfile() {
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
-  const [inputKey, setInputKey] = useState<number | string>(Date.now());
+  const [userId, setUserId] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [bloodType, setBloodType] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [address, setAddress] = useState('');
+  const [medicalHistory, setMedicalHistory] = useState('');
+  const [otherMedicalHistory, setOtherMedicalHistory] = useState('');
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const reader = new FileReader();
-    const file = event.target.files?.[0];
-
-    if (file) {
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          setImagePreviewUrl(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
+  useEffect(() => {
+    if (dateOfBirth) {
+      const today = new Date();
+      const birthDate = new Date(dateOfBirth);
+      let age_now = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age_now--;
+      }
+      setAge(age_now.toString());
     }
-  };
+  }, [dateOfBirth]);
 
-  const handleRemoveImage = () => {
-    setImagePreviewUrl('');
-    setInputKey(Date.now()); // Reset the key to a new value
-  };
+  const diseasesPreventingDonation = [
+    'None',
+    'Hepatitis B or C',
+    'HIV/AIDS',
+    'Heart Disease',
+    'Hemochromatosis',
+    'Blood Cancers',
+    'Other' // When 'Other' is selected, a text box will appear for the user to specify
+  ];
+
+  // ... other handlers for form submission or state changes
 
   return (
-    <div className="bg-[#f7f7f7] pt-[65px] flex flex-col items-center min-h-screen font-roboto">
-      <div className="w-full max-w-4xl m-auto bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row">
+    <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-8 space-y-8">
         
-        {/* Left Column for Profile Photo */}
-        <div className="md:w-1/2 bg-[#f7f7f7] flex flex-col items-center p-8">
-          <div className="w-64 h-64 rounded-full mb-4 overflow-hidden relative">
-            <img
-              className="w-full h-full object-cover"
-              src={imagePreviewUrl || 'src/assets/photo.png'}
-              alt="Profile"
-            />
-          </div>
-          <input
-            key={inputKey}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            id="fileInput"
-            onChange={handleImageChange}
-          />
+        {/* Title */}
+        <h1 className="text-2xl font-semibold text-gray-900">Edit Profile</h1>
 
-          {/* Upload Button */}
-          {!imagePreviewUrl && (
-            <label
-              htmlFor="fileInput"
-              className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[120px]"
-            >
-              Upload Photo
-            </label>
-          )}
+        {/* Form for User Details */}
+        <div className="w-full">
+          <form className="space-y-4">
+            {/* User ID */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="user-id">
+                User ID
+              </label>
+              <input
+                className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                id="user-id"
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                placeholder="User ID"
+              />
+            </div>
 
-          {/* Delete Button */}
-          {imagePreviewUrl && (
-            <button
-              onClick={handleRemoveImage}
-              className="bg-red-600 text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-red-700 transition duration-300 min-w-[135px]"
-            >
-              Delete Photo
-            </button>
-          )}
-        </div>
-
-          {/* Right Column for Form */}
-          <div className="md:w-2/3 p-8">
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label className="block uppercase tracking-wide text-[#bfa260] text-xs font-bold mb-2" htmlFor="grid-first-name">
+            {/* First and Last Name */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="first-name">
                   First Name
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-first-name"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  id="first-name"
                   type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   placeholder="First Name"
                 />
               </div>
-              <div className="w-full md:w-1/2 px-3">
-                <label className="block uppercase tracking-wide text-[#bfa260] text-xs font-bold mb-2" htmlFor="grid-last-name">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="last-name">
                   Last Name
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-last-name"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  id="last-name"
                   type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   placeholder="Last Name"
                 />
               </div>
             </div>
-  
-            <div className="w-full px-3 mb-6">
-              <label className="block uppercase tracking-wide text-[#bfa260] text-xs font-bold mb-2" htmlFor="grid-email">
-                Email
+
+            {/* Email and Phone Number */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="email">
+                  Email
+                </label>
+                <input
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="phone-number">
+                  Phone Number
+                </label>
+                <div className="mt-1 flex rounded-md shadow-sm">
+                  <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                    +966
+                  </span>
+                  <input
+                    type="tel"
+                    className="flex-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-none rounded-r-md"
+                    id="phone-number"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="5X XXX XXXX"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Blood Type and Weight */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="blood-type">
+                  Blood Type
+                </label>
+                <select
+                  id="blood-type"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  value={bloodType}
+                  onChange={(e) => setBloodType(e.target.value)}
+                >
+                  {diseasesPreventingDonation.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="weight">
+                  Weight (kg)
+                </label>
+                <input
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  id="weight"
+                  type="text"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  placeholder="Weight"
+                />
+              </div>
+            </div>
+
+            {/* Date of Birth and Age */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="date-of-birth">
+                  Date of Birth
+                </label>
+                <input
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  id="date-of-birth"
+                  type="date"
+                  value={dateOfBirth}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700" htmlFor="age">
+                  Age
+                </label>
+                <input
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  id="age"
+                  type="text"
+                  value={age}
+                  disabled
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="address">
+                Address
               </label>
-              <input
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-email"
-                type="email"
-                placeholder="inspirehub@example.com"
+              <textarea
+                className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md resize-none"
+                id="address"
+                rows={3}
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Address"
               />
             </div>
-  
-            <div className="w-full px-3 mb-6">
-              <button
-                className="bg-[#5f7fbf] text-white font-bold py-2 px-4 w-full rounded hover:bg-[#3e60a3] transition-all duration-700"
+
+            {/* Medical History */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="medical-history">
+                Medical History
+              </label>
+              <select
+                id="medical-history"
+                className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                value={medicalHistory}
+                onChange={(e) => setMedicalHistory(e.target.value)}
               >
-                Change Password
+                {diseasesPreventingDonation.map((disease) => (
+                  <option key={disease} value={disease}>
+                    {disease}
+                  </option>
+                ))}
+              </select>
+              {medicalHistory === 'Other' && (
+                <textarea
+                  className="mt-4 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md resize-none"
+                  id="other-medical-history"
+                  rows={3}
+                  value={otherMedicalHistory}
+                  onChange={(e) => setOtherMedicalHistory(e.target.value)}
+                  placeholder="Please specify your medical condition"
+                />
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <div>
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+              >
+                Update Profile
               </button>
             </div>
-  
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label className="block uppercase tracking-wide text-[#bfa260] text-xs font-bold mb-2" htmlFor="grid-major">
-                  Major
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-major"
-                  type="text"
-                  placeholder="Computer Science"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-3">
-                <label className="block uppercase tracking-wide text-[#bfa260] text-xs font-bold mb-2" htmlFor="grid-academic-level">
-                  Academic Level
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-academic-level"
-                  type="text"
-                  placeholder="Undergraduate"
-                />
-              </div>
-            </div>
-  
-            <div className="w-full px-3 mb-6">
-              <button
-                className="bg-[#5f7fbf] text-white font-bold py-2 px-4 w-full rounded hover:bg-[#3e60a3] transition-all duration-700"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
-    );
-  }
-  
+    </div>
+  );
+}
