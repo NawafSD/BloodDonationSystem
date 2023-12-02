@@ -257,15 +257,28 @@ export default function EditProfile() {
               )}
             </div>
 
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
-              >
-                Update Profile
-              </button>
-            </div>
+          {/* Button Container */}
+          <div className="flex flex-col items-center space-y-2"> {/* Flex container with column direction */}
+
+            {/* Change Password Button */}
+            <button
+              type="button"
+            //   onClick={handleChangePassword}
+             className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[120px]"
+            >
+              Change Password
+            </button>
+
+            {/* Update Profile Button */}
+            <button
+              type="submit"
+              className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[170px]"
+            >
+              Update Profile
+            </button>
+
+          </div>
+
           </form>
         </div>
       </div>
