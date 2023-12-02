@@ -266,7 +266,7 @@ export default function EditProfile() {
               type="submit"
               className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[170px]"
             >
-              Update Profile
+              Save Changes
             </button>
 
           </div>
