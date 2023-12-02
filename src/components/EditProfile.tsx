@@ -261,13 +261,13 @@ export default function EditProfile() {
           <div className="flex flex-col items-center space-y-2"> {/* Flex container with column direction */}
 
             {/* Change Password Button */}
-            <button
-              type="button"
-            //   onClick={handleChangePassword}
+            <a
+             type="button"
              className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[120px]"
+             href="NewPasswordPage"
             >
               Change Password
-            </button>
+            </a>
 
             {/* Update Profile Button */}
             <button
