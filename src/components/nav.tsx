@@ -57,7 +57,7 @@ export default function Nav() {
     <nav className="fixed top-0 left-0 z-[1000] bg-[#f7f7f7] flex items-center justify-between w-full px-16 pt-4 pb-4 font-medium max-md:px-8 md:ml-0 lg:ml-0">
       <div className="flex items-center gap-16">
         <h1 className="text-2xl font-bold tracking-wider text-red-700 transition duration-300 ease-in-out delay-150 font-nunito hover:-translate-y-1 hover:scale-110">
-          <a href="/">DonorHub</a>
+          <a href="/">Blood Donation System</a>
         </h1>
         <motion.div
           animate={{ opacity: 1, y: 0 }}
