@@ -25,10 +25,10 @@ export default function HomePage() {
             },
             hidden: {},
           }}
-          className="max-w-2xl mx-6 my-16 text-3xl font-black leading-none tracking-tight text-center text-red-700 sm:text-4xl sm:max-w-3xl lg:text-5xl lg:max-w-4xl xl:text-6xl xl:max-w-5xl font-nunito"
+          className="max-w-2xl mx-6 my-16 text-3xl font-black leading-none tracking-tight text-center text-green-700 sm:text-4xl sm:max-w-3xl lg:text-5xl lg:max-w-4xl xl:text-6xl xl:max-w-5xl font-nunito"
         >
           {Array.from(
-            "DonorHub: Where Every Drop Tells a Story of Hope and Help!"
+            "(وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعاً)"
           ).map((char, index) => (
             <motion.span
               key={index}
