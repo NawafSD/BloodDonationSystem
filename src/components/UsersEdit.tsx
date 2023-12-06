@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEdit, faHistory, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function UsersEdit() {
     const initialUsers = [
@@ -23,6 +23,10 @@ export default function UsersEdit() {
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
+    };
+
+    const handleRemoveUser = (userId) => {
+        setUsers(users.filter(user => user.id !== userId));
     };
 
     const filteredUsers = users.filter(user => 
@@ -79,23 +83,39 @@ export default function UsersEdit() {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredUsers.map((user, index) => (
-                                <tr key={index}>
-                                    <td className="border-b border-gray-300 px-5 py-3 text-center">{user.id}</td>
-                                    <td className="border-b border-gray-300 px-5 py-3 text-center">{user.name}</td>
-                                    <td className="border-b border-gray-300 px-5 py-3">
-                                        <div className="flex justify-center">
-                                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
-                                                <FontAwesomeIcon icon={faEdit} className="mr-2" />
-                                                Edit
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                    {filteredUsers.map((user, index) => (
+                        <tr key={index}>
+                            <td className="border-b border-gray-300 px-5 py-3 text-center">{user.id}</td>
+                            <td className="border-b border-gray-300 px-5 py-3 text-center">{user.name}</td>
+                            <td className="border-b border-gray-300 px-5 py-3">
+                                <div className="flex justify-center space-x-2">
+
+                                      {/* History Anchor */}
+                                      <a href="#" className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                                        <FontAwesomeIcon icon={faHistory} className="mr-2" />
+                                        History
+                                    </a>
+
+                                    {/* Edit Anchor */}
+                                    <a href="EditProfileAdminPage" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                                        <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                                        Edit
+                                    </a>
+
+                                    {/* Remove Button */}
+                                    <button 
+                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" 
+                                        onClick={() => handleRemoveUser(user.id)}
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
             </div>
         </div>
     );
