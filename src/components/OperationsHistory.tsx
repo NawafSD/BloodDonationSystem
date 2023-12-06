@@ -16,8 +16,9 @@ export default function OperationsHistory() {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-8 space-y-8 m-6">
-      <h1 className="text-2xl font-semibold text-gray-900">Operations History</h1>
+    <div className="bg-[#f7f7f7] h-screen w-full justify-center flex flex-col items-center">
+    <div className=" bg-white w-1/2 rounded-lg shadow-lg overflow-hidden p-8 space-y-8 m-6">
+      <h1 className=" text-center text-2xl font-semibold text-gray-900">Operations History</h1>
       <table className="w-full text-left">
         <thead>
           <tr>
@@ -36,6 +37,7 @@ export default function OperationsHistory() {
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

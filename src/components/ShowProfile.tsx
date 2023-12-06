@@ -147,7 +147,7 @@ export default function ShowProfile() {
         </div>
       </div>
 
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full h-1/2 flex items-start justify-start -mb-56">
         <OperationsHistory />
         </div>
     </div>
