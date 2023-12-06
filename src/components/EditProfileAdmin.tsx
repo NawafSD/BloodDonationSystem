@@ -1,30 +1,48 @@
 import React, { useState, useEffect } from 'react';
 
-export default function EditProfile() {
-  const [userId, setUserId] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [bloodType, setBloodType] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [age, setAge] = useState('');
-  const [weight, setWeight] = useState('');
-  const [address, setAddress] = useState('');
-  const [medicalHistory, setMedicalHistory] = useState('');
-  const [otherMedicalHistory, setOtherMedicalHistory] = useState('');
+export default function EditProfileAdmin() {
+  // Provided user profile data
+  const userProfile = {
+    userId: '1112223334',
+    name: 'Abdullah Mohammed',
+    email: 'Abdullah2@gmail.com',
+    phoneNumber: '557592000',
+    bloodType: 'A+',
+    dateOfBirth: '1990-01-01',
+    age: '33',
+    weight: '70',
+    address: '123 Main Street',
+    medicalHistory: 'None',
+    otherMedicalHistory: ''
+  };
+
+  // State variables initialized with userProfile data
+  const [userId, setUserId] = useState(userProfile.userId);
+  const [name, setName] = useState(userProfile.name);
+  const [email, setEmail] = useState(userProfile.email);
+  const [phoneNumber, setPhoneNumber] = useState(userProfile.phoneNumber);
+  const [bloodType, setBloodType] = useState(userProfile.bloodType);
+  const [dateOfBirth, setDateOfBirth] = useState(userProfile.dateOfBirth);
+  const [age, setAge] = useState(userProfile.age);
+  const [weight, setWeight] = useState(userProfile.weight);
+  const [address, setAddress] = useState(userProfile.address);
+  const [medicalHistory, setMedicalHistory] = useState(userProfile.medicalHistory);
+  const [otherMedicalHistory, setOtherMedicalHistory] = useState(userProfile.otherMedicalHistory);
 
   useEffect(() => {
-    if (dateOfBirth) {
+    // Recalculate age whenever the date of birth changes
+    const calculateAge = (dob) => {
       const today = new Date();
-      const birthDate = new Date(dateOfBirth);
+      const birthDate = new Date(dob);
       let age_now = today.getFullYear() - birthDate.getFullYear();
       const m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age_now--;
       }
-      setAge(age_now);
-    }
+      return age_now;
+    };
+
+    setAge(calculateAge(dateOfBirth));
   }, [dateOfBirth]);
 
   const getMaxDate = () => {
@@ -41,15 +59,14 @@ export default function EditProfile() {
     'Heart Disease',
     'Hemochromatosis',
     'Blood Cancers',
-    'Other' // When 'Other' is selected, a text box will appear for the user to specify
+    'Other'
   ];
 
   const handleNumericInputChange = (setterFunction, maxLength) => (event) => {
-    // Check if the input value is numeric and set the state
     const value = event.target.value;
     if ((value === '' || /^[0-9\b]+$/.test(value)) && value.length <= maxLength) {
-        setterFunction(value);
-      }
+      setterFunction(value);
+    }
   };
 
   return (
@@ -76,34 +93,19 @@ export default function EditProfile() {
                 />
             </div>
 
-            {/* First and Last Name */}
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700" htmlFor="first-name">
-                  First Name
-                </label>
-                <input
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
-                  id="first-name"
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="First Name"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700" htmlFor="last-name">
-                  Last Name
-                </label>
-                <input
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
-                  id="last-name"
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Last Name"
-                />
-              </div>
+            {/* Combined Name Field */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="name">
+                Name
+              </label>
+              <input
+                className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Name"
+              />
             </div>
 
             {/* Email and Phone Number */}
