@@ -135,7 +135,7 @@ export default function ShowProfile() {
               {/* Update Profile Button */}
               <a
                 className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[170px] text-center"
-                href="EditProfilePage"
+                href="EditProfileUserPage"
               >
                 Update Profile
               </a>
