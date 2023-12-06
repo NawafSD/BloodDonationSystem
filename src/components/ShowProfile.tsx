@@ -4,8 +4,7 @@ export default function ShowProfile() {
   // Example user profile data
   const userProfile = {
     userId: '1112223334',
-    firstName: 'Abdullah',
-    lastName: 'Mohammed',
+    name: 'Abdullah Mohammed',
     email: 'Abdullah2@gmail.com',
     phoneNumber: '557592000',
     bloodType: 'A+',
@@ -19,8 +18,7 @@ export default function ShowProfile() {
 
   // Initialize state with the example user profile data
   const [userId] = useState(userProfile.userId);
-  const [firstName] = useState(userProfile.firstName);
-  const [lastName] = useState(userProfile.lastName);
+  const [name] = useState(userProfile.name);
   const [email] = useState(userProfile.email);
   const [phoneNumber] = useState(userProfile.phoneNumber);
   const [bloodType] = useState(userProfile.bloodType);
@@ -65,19 +63,11 @@ useEffect(() => {
               </div>
             </div>
 
-            {/* First and Last Name */}
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">First Name</label>
-                <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {firstName}
-                </div>
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {lastName}
-                </div>
+               {/* Name */}
+               <div>
+              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
+                {name}
               </div>
             </div>
 
