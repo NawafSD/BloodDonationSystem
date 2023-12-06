@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import OperationsHistory from '../components/OperationsHistory'; 
 
 export default function ShowProfile() {
   // Example user profile data
@@ -146,7 +147,9 @@ export default function ShowProfile() {
         </div>
       </div>
 
-
+      <div className="w-full flex items-center justify-center">
+        <OperationsHistory />
+        </div>
     </div>
   );
 }
