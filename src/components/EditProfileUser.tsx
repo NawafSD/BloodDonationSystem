@@ -51,7 +51,7 @@ export default function EditProfileUser() {
             <div>
                 <label className="block text-sm font-medium text-gray-700" htmlFor="user-id">User ID</label>
                 <input
-                className="mt-1 block w-full px-3 py-2 rounded-md"
+                className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                 id="user-id"
                 type="text"
                 value={userProfile.userId}
@@ -62,7 +62,7 @@ export default function EditProfileUser() {
             <div>
               <label className="block text-sm font-medium text-gray-700" htmlFor="name">Name</label>
               <input
-                className="mt-1 block w-full px-3 py-2 rounded-md"
+                className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                 id="name"
                 type="text"
                 value={userProfile.name}
@@ -75,7 +75,7 @@ export default function EditProfileUser() {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="email">Email</label>
                 <input
-                  className="mt-1 block w-full px-3 py-2 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                   id="email"
                   type="email"
                   value={userProfile.email}
@@ -86,7 +86,7 @@ export default function EditProfileUser() {
                 <label className="block text-sm font-medium text-gray-700" htmlFor="phone-number">Phone Number</label>
                 <input
                   type="tel"
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border-2 border-black bg-gray-200 text-gray-700 rounded-md"
                   id="phone-number"
                   value={phoneNumber}
                   onChange={handleNumericInputChange(setPhoneNumber, 10)}
@@ -100,7 +100,7 @@ export default function EditProfileUser() {
                 <label className="block text-sm font-medium text-gray-700" htmlFor="blood-type">Blood Type</label>
                 <select
                   id="blood-type"
-                  className="mt-1 block w-full px-3 py-2 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                   value={userProfile.bloodType}
                   disabled
                 >
@@ -114,7 +114,7 @@ export default function EditProfileUser() {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="weight">Weight (kg)</label>
                 <input
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border-2 border-black bg-gray-200 text-gray-700 rounded-md"
                   id="weight"
                   type="text"
                   value={weight}
@@ -128,7 +128,7 @@ export default function EditProfileUser() {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="date-of-birth">Date of Birth</label>
                 <input
-                  className="mt-1 block w-full px-3 py-2 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                   id="date-of-birth"
                   type="date"
                   value={userProfile.dateOfBirth}
@@ -138,7 +138,7 @@ export default function EditProfileUser() {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700" htmlFor="age">Age</label>
                 <input
-                  className="mt-1 block w-full px-3 py-2 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                   id="age"
                   type="text"
                   value={userProfile.age}
@@ -150,7 +150,7 @@ export default function EditProfileUser() {
             <div>
                 <label className="block text-sm font-medium text-gray-700" htmlFor="address">Address</label>
                 <textarea
-                    className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md resize-none"
+                    className="mt-1 block w-full px-3 py-2 border-2 border-black bg-gray-200 text-gray-700 rounded-md resize-none"
                     id="address"
                     rows={3}
                     value={address}
@@ -162,7 +162,7 @@ export default function EditProfileUser() {
                 <label className="block text-sm font-medium text-gray-700" htmlFor="medical-history">Medical History</label>
                 <select
                   id="medical-history"
-                  className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
+                  className="mt-1 block w-full px-3 py-2 border-2 border-black bg-gray-200 text-gray-700 rounded-md"
                   value={medicalHistory}
                   onChange={(e) => setMedicalHistory(e.target.value)}
                 >
