@@ -80,12 +80,17 @@ useEffect(() => {
                 </div>
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-                <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {phoneNumber}
-                </div>
-              </div>
+              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+          <div className="mt-1 flex rounded-md shadow-sm">
+            <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+              +966
+            </span>
+            <div className="flex-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-none rounded-r-md">
+              {phoneNumber}
             </div>
+          </div>
+        </div>
+      </div>
 
             {/* Blood Type and Weight */}
             <div className="flex gap-4">
