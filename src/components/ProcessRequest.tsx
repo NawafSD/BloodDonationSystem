@@ -54,7 +54,7 @@ export default function ProcessRequest() {
   };
 
   return (
-    <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
+    <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center justify-center min-h-screen font-roboto">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-8 space-y-8">
         <h1 className="text-2xl font-semibold text-gray-900 mb-8 text-center">Process For Blood Request</h1>
         <form onSubmit={handleSubmit}>
