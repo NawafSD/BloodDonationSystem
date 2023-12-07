@@ -1,3 +1,5 @@
+API Key for Supabase: T6CASiAmwGJfyaRk
+
 # Astro Starter Kit: Basics
 
 ```sh
