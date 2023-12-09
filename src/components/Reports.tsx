@@ -1,12 +1,12 @@
 export default function Reports() {
   // Define a common card class for reuse
   const cardClass =
-    "block w-full h-full p-8 bg-white hover:bg-gray-100 flex flex-col hover:scale-105 items-center justify-center text-center border-2 border-gray-300 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-400 transition duration-300";
+    "block w-full h-full p-5 bg-white hover:bg-gray-100 flex flex-col hover:scale-105 items-center justify-center text-center border-2 border-gray-300 rounded-xl shadow-lg hover:shadow-xl hover:border-gray-400 transition duration-300";
 
   return (
     <section className="flex items-center justify-center w-full min-h-screen px-4 bg-[#f7f7f7] md:px-10">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2 md:gap-x-8 md:gap-y-12">
-        <div className="min-w-[16rem] min-h-[24rem]">
+        <div className="min-w-[12rem] min-h-[20rem]">
           <a href="BloodDonationsReportPage" className={cardClass}>
             <h5 className="mb-2 text-2xl font-semibold text-gray-700 ">
               Blood Donations
