@@ -58,6 +58,11 @@ const HideIcon = () => <FontAwesomeIcon icon={faEyeSlash} />;
 const MAX_STEPS = 5;
 
 const SignUp = () => {
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [weight, setWeight] = useState("");
+  const [address, setAddress] = useState("");
   const [formStep, setFormStep] = useState(0);
   const [showPolicy, setShowPolicy] = useState(false);
   const [showReturnButton, setShowReturnButton] = useState(false);
@@ -103,12 +108,12 @@ const SignUp = () => {
     setPasswordStrength(checkPasswordStrength(password));
   };
 
-  //   const handleSignUp = async () => {
+     const handleSignUp = async () => {
   //     const supabase = createSupabaseBrowser();
   //     const { data, error } = await supabase.auth.signUp({ email, password });
   //     if (error) return console.error(error);
-  //     if (data) return console.log(data);
-  //   };
+       return console.log(name, id, phoneNumber, email, password, dateOfBirth, address, bloodTypes, diseaseItems);
+     };
 
   const handlePolicyClick = () => {
     setShowPolicy(true);
@@ -125,7 +130,7 @@ const SignUp = () => {
 
   const renderButton = () => {
     if (formStep > 4) {
-      //   handleSignUp();
+         handleSignUp();
       return undefined;
     } else if (formStep === 4) {
       return (
@@ -210,6 +215,8 @@ const SignUp = () => {
                   </div>
                   <input
                     type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Hassan Alabdulal"
                   />
@@ -225,6 +232,8 @@ const SignUp = () => {
                   </div>
                   <input
                     type="text"
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="1111111111"
                   />
@@ -240,6 +249,8 @@ const SignUp = () => {
                   </div>
                   <input
                     type="text"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="+996555555555"
                   />
@@ -392,6 +403,8 @@ const SignUp = () => {
                   </div>
                   <input
                     type="text"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="80kg"
                   />
@@ -422,6 +435,8 @@ const SignUp = () => {
                   </div>
                   <textarea
                     type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                     className="resize-none w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Saudi Arabia"
                   />
