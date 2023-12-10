@@ -4,7 +4,7 @@ import PasswordStrengthIndicator from "..//components/UI/PasswordStrengthIndicat
 import { MenuWithCheckbox } from "../components/UI/MenuWithCheckBox";
 import { DefaultMenu } from "../components/UI/DefaultMenu";
 import RadioButtonSelector from "../components/UI/RadioButtonSelector";
-
+import { supabase } from '../../supabaseClient.js';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
@@ -60,6 +60,7 @@ const MAX_STEPS = 5;
 const SignUp = () => {
   const [selectedBloodType, setSelectedBloodType] = useState("");
   const [selectedDiseases, setSelectedDiseases] = useState("");
+  const [diseaseFree, setDiseaseFree] = useState<boolean>(false);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -115,15 +116,50 @@ const SignUp = () => {
 
      const handleDiseasesSelect = (diseases: Set<string>) => {
       const diseasesArray = Array.from(diseases);
+      if (diseasesArray[0] == "Nothing") {
+        setDiseaseFree(true)
+      }
       const diseasesString = diseasesArray.join(", ");
       setSelectedDiseases(diseasesString);
      }
-
+  
      const handleSignUp = async () => {
-  //     const supabase = createSupabaseBrowser();
-  //     const { data, error } = await supabase.auth.signUp({ email, password });
-  //     if (error) return console.error(error);
-       return console.log(selectedDiseases);
+      console.log(supabase)
+      const {data: userInsertData, error: userInsertError} = await supabase
+        .from("users")
+        .insert([{
+          userid: id, 
+          name, 
+          address, 
+          phonenumber: phoneNumber, 
+          email, 
+          password, 
+          bloodtype: selectedBloodType, 
+          dateofbirth: dateOfBirth, 
+          weight
+        }])
+         
+      if (userInsertError) {
+        console.error("Error inserting data into users table: ", userInsertError)
+        return; // Stop the process if there is an error
+      }
+
+      const {error: medicalHistoryInsertError} = await supabase
+        .from('medicalhistory')
+        .insert([{
+          userid: id,
+          diseasesfree: diseaseFree,
+          details: selectedDiseases
+      }])
+
+      if (medicalHistoryInsertError) {
+        console.error("Error inserting data into medicalhistory table: ", medicalHistoryInsertError)
+      }
+
+      else {
+        console.log("Users and medical history data inserted successfully")
+      }
+       
      };
 
   const handlePolicyClick = () => {
