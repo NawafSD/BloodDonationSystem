@@ -18,13 +18,14 @@ const NotificationItem = ({ notification, onAccept, onPay }) => {
             <FontAwesomeIcon icon={faCheck} className="text-green-500 m-11" />
           ) : (
             notification.type === 'Request for Donate' ? (
-              <button
+              <a
                 className={payButtonClass}
                 onClick={() => onPay(notification)}
+                href="PaymentPage"
               >
                 <FontAwesomeIcon icon={faDollarSign} className="mr-2" />
                 Pay
-              </button>
+              </a>
             ) : (
               <button
                 className={buttonClass}
