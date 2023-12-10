@@ -244,15 +244,6 @@ const SignUp = () => {
                     placeholder="+996555555555"
                   />
                 </div>
-                <label className="px-1 mt-3 mb-2 text-xs font-semibold">
-                  Status
-                </label>
-                <div className="flex">
-                  <RadioButtonSelector
-                    name="Status"
-                    options={userStatusOptions}
-                  />
-                </div>
               </section>
             )}
 
@@ -421,7 +412,7 @@ const SignUp = () => {
               <section className="flex flex-col">
                 <h2 className="mb-8 text-3xl font-semibold ">Address</h2>
                 <label className="px-1 mb-2 text-xs font-semibold">
-                  Country
+                  Address
                 </label>
                 <div className="flex mb-4">
                   <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none">
@@ -429,53 +420,10 @@ const SignUp = () => {
                       <FontAwesomeIcon icon={faEarthAmericas} />
                     </i>
                   </div>
-                  <input
+                  <textarea
                     type="text"
-                    className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
+                    className="resize-none w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
                     placeholder="Saudi Arabia"
-                  />
-                </div>
-                <label className="px-1 mb-2 text-xs font-semibold">City</label>
-                <div className="flex mb-4">
-                  <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none">
-                    <i className="text-lg text-gray-400 mdi mdi-email-outline">
-                      <FontAwesomeIcon icon={faLocationDot} />
-                    </i>
-                  </div>
-                  <input
-                    type="text"
-                    className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
-                    placeholder="Dhahran"
-                  />
-                </div>
-                <label className="px-1 mb-2 text-xs font-semibold">
-                  Street
-                </label>
-                <div className="flex mb-4">
-                  <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none">
-                    <i className="text-lg text-gray-400 mdi mdi-email-outline">
-                      <FontAwesomeIcon icon={faRoad} />
-                    </i>
-                  </div>
-                  <input
-                    type="text"
-                    className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
-                    placeholder="Abdullah Ibn Al Abbas Street"
-                  />
-                </div>
-                <label className="px-1 mb-2 text-xs font-semibold">
-                  Postal Code
-                </label>
-                <div className="flex mb-4">
-                  <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none">
-                    <i className="text-lg text-gray-400 mdi mdi-email-outline">
-                      <FontAwesomeIcon icon={faHashtag} />
-                    </i>
-                  </div>
-                  <input
-                    type="text"
-                    className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
-                    placeholder="32227"
                   />
                 </div>
               </section>
