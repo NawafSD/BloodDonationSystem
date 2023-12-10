@@ -58,6 +58,8 @@ const HideIcon = () => <FontAwesomeIcon icon={faEyeSlash} />;
 const MAX_STEPS = 5;
 
 const SignUp = () => {
+  const [selectedBloodType, setSelectedBloodType] = useState("");
+  const [selectedDiseases, setSelectedDiseases] = useState("");
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -107,12 +109,21 @@ const SignUp = () => {
     setPassword(password);
     setPasswordStrength(checkPasswordStrength(password));
   };
+     const handleBloodTypeSelect = (bloodType: string) => {
+      setSelectedBloodType(bloodType);
+     }
+
+     const handleDiseasesSelect = (diseases: Set<string>) => {
+      const diseasesArray = Array.from(diseases);
+      const diseasesString = diseasesArray.join(", ");
+      setSelectedDiseases(diseasesString);
+     }
 
      const handleSignUp = async () => {
   //     const supabase = createSupabaseBrowser();
   //     const { data, error } = await supabase.auth.signUp({ email, password });
   //     if (error) return console.error(error);
-       return console.log(name, id, phoneNumber, email, password, dateOfBirth, address, bloodTypes, diseaseItems);
+       return console.log(selectedDiseases);
      };
 
   const handlePolicyClick = () => {
@@ -412,12 +423,12 @@ const SignUp = () => {
                 <label className="px-1 mb-2 text-xs font-semibold">
                   Blood Type
                 </label>
-                <DefaultMenu items={bloodTypes} />
+                <DefaultMenu items={bloodTypes} onSelect={handleBloodTypeSelect}/>
 
                 <label className="px-1 mt-4 mb-2 text-xs font-semibold">
                   Diseases
                 </label>
-                <MenuWithCheckbox items={diseaseItems} />
+                <MenuWithCheckbox items={diseaseItems} onSelect={handleDiseasesSelect}/>
               </section>
             )}
 

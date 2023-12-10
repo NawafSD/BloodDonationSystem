@@ -16,9 +16,10 @@ interface MenuItem {
 
 interface MenuWithCheckboxProps {
   items: MenuItem[];
+  onSelect: (selectedItems: Set<string>) => void;
 }
 
-export function MenuWithCheckbox({ items }: MenuWithCheckboxProps) {
+export function MenuWithCheckbox({ items, onSelect }: MenuWithCheckboxProps) {
   const [selectedItems, setSelectedItems] = useState(new Set<string>());
 
   const handleCheckboxChange = (label: string, isChecked: boolean) => {
@@ -29,6 +30,7 @@ export function MenuWithCheckbox({ items }: MenuWithCheckboxProps) {
       } else {
         newSelectedItems.delete(label);
       }
+      onSelect(newSelectedItems);
       return newSelectedItems;
     });
   };

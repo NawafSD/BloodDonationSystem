@@ -15,13 +15,15 @@ interface DefaultMenuItem {
 
 interface DefaultMenuProps {
   items: DefaultMenuItem[];
+  onSelect: (label: string) => void;
 }
 
-export function DefaultMenu({ items }: DefaultMenuProps) {
+export function DefaultMenu({ items, onSelect }: DefaultMenuProps) {
   const [selectedItem, setSelectedItem] = useState("");
 
   const handleItemClick = (label: string) => {
     setSelectedItem(label);
+    onSelect(label);
   };
 
   return (
