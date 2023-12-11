@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../../supabaseClient';
 
 export default function AddCollectionDrive() {
   const [title, setTitle] = useState('');
@@ -27,11 +28,29 @@ export default function AddCollectionDrive() {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
     // Submit form data to server or state management
-    console.log({ title, location, startDate, endDate });
-    // Additional submission logic goes here
+    const {data: userInsertData, error: userInsertError} = await supabase
+      .from("blooddrives")
+      .insert([{
+        blooddriveid: 1,
+        bankid: null,
+        title,
+        location,
+        start_date: startDate,
+        end_date: endDate
+      }])
+
+      if (userInsertError) {
+        console.error("Error inserting data into users table: ", userInsertError)
+        return; // Stop the process if there is an error
+      }
+
+      else {
+        console.log("Blood drive data inserted successfully")
+      }
   };
 
   return (
