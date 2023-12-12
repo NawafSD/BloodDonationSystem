@@ -1,7 +1,47 @@
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import { supabase } from '../../supabaseClient.js';
 
-export default function SignIn() {
+
+const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const handleSignIn = async (event) => {
+    event.preventDefault()
+
+    // Fetch the user data based on the email
+    let { data, error } = await supabase
+    .from('users') // Replace 'users' with your actual table name
+    .select('password, isadmin')
+    .eq('email', email)
+    .single();
+
+  if (error) {
+    console.error('Error fetching user', error);
+    return;
+  }
+
+    // Check if the password matches
+  if (data && data.password === password) {
+    console.log('Password match. User signed in.');
+
+    // Update isAdmin state based on the isadmin field from the database
+    setIsAdmin(data.isadmin);
+  }   
+  else {
+    console.log('Incorrect password or user does not exist.');
+  }
+    console.log(email, password);
+  };
+
+  if (isAdmin)
+    console.log("He is admin");
+  else
+    console.log("Not admin");
+
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-5 bg-[#f7f7f7] min-w-screen font-roboto">
       <div className="w-2/3 overflow-hidden text-gray-500 bg-gray-100 shadow-xl rounded-3xl">
@@ -218,7 +258,7 @@ export default function SignIn() {
               </h1>
               <p>Enter your information to sign in</p>
             </div>
-            <form method="post">
+            <form method="post" onSubmit={handleSignIn}>
               <div className="flex mt-20 -mx-3">
                 <div className="w-full px-3 mb-5">
                   <label className="px-1 text-xs font-semibold">Email</label>
@@ -230,6 +270,8 @@ export default function SignIn() {
                     </div>
                     <input
                       type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="donorhub@example.com"
                     />
@@ -247,6 +289,8 @@ export default function SignIn() {
                     </div>
                     <input
                       type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#292828]"
                       placeholder="************"
                     />
@@ -288,4 +332,6 @@ export default function SignIn() {
       </div>
     </div>
   );
-}
+};
+
+export default SignIn;

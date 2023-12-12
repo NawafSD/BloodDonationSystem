@@ -124,7 +124,6 @@ const SignUp = () => {
      }
   
      const handleSignUp = async () => {
-      console.log(supabase)
       const {data: userInsertData, error: userInsertError} = await supabase
         .from("users")
         .insert([{
@@ -136,7 +135,8 @@ const SignUp = () => {
           password, 
           bloodtype: selectedBloodType, 
           dateofbirth: dateOfBirth, 
-          weight
+          weight,
+          isadmin: false
         }])
          
       if (userInsertError) {
