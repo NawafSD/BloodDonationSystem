@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEdit, faHistory, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { supabase } from '../../supabaseClient';
 
 export default function UsersEdit() {
     const initialUsers = [
@@ -20,6 +21,8 @@ export default function UsersEdit() {
 
     const [users, setUsers] = useState(initialUsers);
     const [searchTerm, setSearchTerm] = useState('');
+    const [userData , setUserData] = useState<null | any[]>(null)
+    const [userError , setUserError] = useState<null | String>(null)
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
@@ -32,7 +35,24 @@ export default function UsersEdit() {
     const filteredUsers = users.filter(user => 
         user.id.includes(searchTerm) || user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    // function that handle extracting data
+    useEffect(() => {
+        const getUsers =async () => {
+            const {data,error} = await supabase
+            .from('users')
+            .select()
 
+            if(data){
+                setUserData(data)
+                setUserError(null)
+            }
+            if(error){
+                setUserData(null)
+                setUserError("can't get data")
+            }
+            getUsers()
+        }
+    },[])
     return (
       <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
           <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-8">
