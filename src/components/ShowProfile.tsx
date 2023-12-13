@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useUserContext } from '../config/UserContext.jsx';
 import OperationsHistory from '../components/OperationsHistory'; 
 
-export default function ShowProfile() {
+const ShowProfile = () => {
   // Example user profile data
   const userProfile = {
     userId: '1112223334',
@@ -18,7 +19,8 @@ export default function ShowProfile() {
   };
 
   // Initialize state with the example user profile data
-  const [userId] = useState(userProfile.userId);
+  const { userID, setUserID } = useUserContext();
+  const [userId] = useState(userID)
   const [name] = useState(userProfile.name);
   const [email] = useState(userProfile.email);
   const [phoneNumber] = useState(userProfile.phoneNumber);
@@ -152,4 +154,6 @@ export default function ShowProfile() {
         </div>
     </div>
   );
-}
+};
+
+export default ShowProfile;

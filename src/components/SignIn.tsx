@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from '../../supabaseClient.js';
+import { navigate } from "astro/transitions/router";
+import { useUserContext } from '../config/UserContext';
 
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const {setUserID} = useUserContext();
 
-  const handleSignIn = async (event) => {
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     // Fetch the user data based on the email
     let { data, error } = await supabase
     .from('users') // Replace 'users' with your actual table name
-    .select('password, isadmin')
+    .select('userid, password, isadmin')
     .eq('email', email)
     .single();
 
@@ -30,17 +33,16 @@ const SignIn = () => {
 
     // Update isAdmin state based on the isadmin field from the database
     setIsAdmin(data.isadmin);
+    console.log(data.userid);
+    setUserID(data.userid);    
+    console.log(setUserID);
+    navigate('/MainPage');
   }   
   else {
     console.log('Incorrect password or user does not exist.');
   }
-    console.log(email, password);
   };
 
-  if (isAdmin)
-    console.log("He is admin");
-  else
-    console.log("Not admin");
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-5 bg-[#f7f7f7] min-w-screen font-roboto">

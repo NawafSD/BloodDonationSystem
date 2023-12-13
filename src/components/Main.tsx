@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faSliders } from "@fortawesome/free-solid-svg-icons";
+import { useUserContext } from '../config/UserContext';
 import { useState } from "react";
 
 type DonationEvent = {
@@ -13,7 +14,9 @@ type DonationEvent = {
   category: string;
 };
 
-export default function Main() {
+const Main = () => {
+  const { userID, setUserID } = useUserContext();
+  console.log(userID);
   const DonationEvents: DonationEvent[] = [
     {
       id: 1,
@@ -175,4 +178,6 @@ export default function Main() {
       </div>
     </div>
   );
-}
+};
+
+export default Main
