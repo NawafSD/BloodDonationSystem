@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import Cookies from 'js-cookie';
+import { supabase } from '../../supabaseClient.js';
 
 const NotificationItem = ({ notification, onAccept, onPay }) => {
   const buttonClass = "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition-colors duration-300";
@@ -43,22 +45,27 @@ const NotificationItem = ({ notification, onAccept, onPay }) => {
 };
 
 export default function Notification() {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'Request for Recipient',
-      from: 'Hassan Alabdulal',
-      date: '24/05/2023',
-      isCompleted: false
-    },
-    {
-      id: 2,
-      type: 'Request for Donate',
-      from: 'Abdullah Al Matawah',
-      date: '26/05/2023',
-      isCompleted: false
-    },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const userID = Cookies.get('userID');
+      if (!userID) return;
+
+      let { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('userid', userID);
+
+      if (error) {
+        console.error('Error fetching notifications:', error);
+      } else {
+        setNotifications(data);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
 
   const handleAccept = (notification) => {
     setNotifications((currentNotifications) =>
@@ -117,4 +124,7 @@ export default function Notification() {
       </div>
     </div>
   );
-}
+}         
+
+                    
+

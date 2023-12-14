@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { supabase } from '../../supabaseClient.js';
 
 export default function ProcessRequest() {
   const [events] = useState([
@@ -10,19 +12,38 @@ export default function ProcessRequest() {
   const [recipientData, setRecipientData] = useState({ id: '', name: '', bloodType: '' });
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cost, setCost] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const recipients = [
-    { id: '1112223334', name: 'John Doe', bloodType: 'A+' },
-    { id: '2223334445', name: 'Jane Smith', bloodType: 'O-' },
-    { id: '5775775588', name: 'John Doe', bloodType: 'A+' },
-    { id: '3892974858', name: 'Jane Smith', bloodType: 'O-' },
-    { id: '7900482028', name: 'John Doe', bloodType: 'A+' },
-    { id: '8494004284', name: 'Jane Smith', bloodType: 'O-' },
-    // ... more recipients
-  ];
+// Fetch recipient's details based on ID
+  const fetchRecipientDetails = async () => {
+    if (!recipientIdInput) return;
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('name, bloodtype')
+        .eq('userid', recipientIdInput)
+        .single();
 
-  // Filter recipients based on the input
-  const filteredRecipients = recipients.filter(r => r.id.includes(recipientIdInput));
+      if (error) throw error;
+
+      setRecipientData({
+        id: recipientIdInput,
+        name: data.name,
+        bloodType: data.bloodtype,
+      });
+    } catch (error) {
+      console.error('Error fetching recipient details:', error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+      fetchRecipientDetails();
+    
+  }, [recipientIdInput]);
+
 
   const handleEventChange = (event) => {
     setSelectedEvent(event.target.value);
@@ -43,16 +64,44 @@ export default function ProcessRequest() {
     setCost(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+   // Submit handler
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle the form submission
-    console.log({
-      selectedEvent,
-      recipientData,
-      cost
-    });
+    setIsLoading(true);
+
+    // Fetch requester's name
+    const requesterID = Cookies.get('userID');
+    const { data: requesterData } = await supabase
+      .from('users')
+      .select('name')
+      .eq('userid', requesterID)
+      .single();
+
+    // Prepare data for the notifications table
+    const notificationData = {
+      userid: recipientIdInput,
+      type: 'Request for Donate',
+      from: requesterData.name,
+      date: new Date().toISOString().split('T')[0],
+      cost,
+    };
+
+    // Insert data into the notifications table
+    const { error } = await supabase
+      .from('notifications')
+      .insert([notificationData]);
+
+    if (error) {
+      console.error('Error submitting request:', error.message);
+    } else {
+      console.log('Request submitted successfully');
+      // Reset form or navigate to another page
+    }
+
+    setIsLoading(false);
   };
 
+  // ... existing return statement
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center justify-center min-h-screen font-roboto">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-8 space-y-8">
@@ -87,19 +136,7 @@ export default function ProcessRequest() {
               className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               placeholder="Enter ID"
             />
-            {showSuggestions && (
-              <ul className="absolute z-10 w-full bg-white shadow-md max-h-60 overflow-auto">
-                {filteredRecipients.map((recipient) => (
-                  <li
-                    key={recipient.id}
-                    onClick={() => handleSelectRecipient(recipient)}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                  >
-                    {recipient.id}
-                  </li>
-                ))}
-              </ul>
-            )}
+  
           </div>
 
           <div className="mb-4">
@@ -156,4 +193,5 @@ export default function ProcessRequest() {
       </div>
     </div>
   );
-}
+
+              };
