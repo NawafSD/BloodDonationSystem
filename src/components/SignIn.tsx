@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from '../../supabaseClient.js';
 import { navigate } from "astro/transitions/router";
-import { useUserContext } from '../config/UserContext';
+import Cookies from 'js-cookie';
 
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
-  const {setUserID} = useUserContext();
 
-  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (event) => {
     event.preventDefault()
 
     // Fetch the user data based on the email
@@ -33,15 +32,14 @@ const SignIn = () => {
 
     // Update isAdmin state based on the isadmin field from the database
     setIsAdmin(data.isadmin);
-    console.log(data.userid);
-    setUserID(data.userid);    
-    console.log(setUserID);
+    Cookies.set('userID', data.userid, { expires: 1, path: '/' }); // Expires in 1 day
     navigate('/MainPage');
-  }   
+
+    }
   else {
     console.log('Incorrect password or user does not exist.');
   }
-  };
+};
 
 
   return (

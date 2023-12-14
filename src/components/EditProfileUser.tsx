@@ -1,27 +1,92 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../../supabaseClient.js';
+import Cookies from 'js-cookie';
+import { navigate } from "astro/transitions/router";
+
 
 export default function EditProfileUser() {
-  // Provided user profile data
-  const userProfile = {
-    userId: '1112223334',
-    name: 'Abdullah Mohammed',
-    email: 'Abdullah2@gmail.com',
-    phoneNumber: '557592000',
-    bloodType: 'A+',
-    dateOfBirth: '1990-01-01',
-    age: '33',
-    weight: '70',
-    address: '123 Main Street',
-    medicalHistory: 'None',
-    otherMedicalHistory: ''
+  // Initialize state
+  const [userProfile, setUserProfile] = useState({
+    userID: 0,
+    name: '',
+    email: '',
+    phoneNumber: '',
+    bloodType: '',
+    dateOfBirth: '',
+    age: 0,
+    weight: 0,
+    address: '',
+    medicalHistory: '',
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userID = Cookies.get('userID');
+      console.log(userID)
+
+      // Fetch user data
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', userID)
+        .single();
+
+      if (userError) console.error(userError);
+      else {
+        // Fetch medical history data
+        const { data: medicalData, error: medicalError } = await supabase
+          .from('medicalhistory')
+          .select('*')
+          .eq('userid', userID)
+          .single();
+
+        if (medicalError) console.error(medicalError);
+        else {
+          // Calculate age
+          const age = calculateAge(userData.dateofbirth);
+
+          // Update state
+          setUserProfile({
+            userID,
+            name: userData.name,
+            email: userData.email,
+            phoneNumber: userData.phonenumber,
+            bloodType: userData.bloodtype,
+            dateOfBirth: userData.dateofbirth,
+            age,
+            weight: userData.weight,
+            address: userData.address,
+            medicalHistory: medicalData.diseases
+          });
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Helper function to calculate age
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const difference = Date.now() - birthDate.getTime();
+    const ageDate = new Date(difference);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
 
   // State variables for editable fields
-  const [phoneNumber, setPhoneNumber] = useState(userProfile.phoneNumber);
-  const [weight, setWeight] = useState(userProfile.weight);
-  const [address, setAddress] = useState(userProfile.address);
-  const [medicalHistory, setMedicalHistory] = useState(userProfile.medicalHistory);
-  const [otherMedicalHistory, setOtherMedicalHistory] = useState(userProfile.otherMedicalHistory);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [weight, setWeight] = useState('');
+  const [address, setAddress] = useState('');
+  const [medicalHistory, setMedicalHistory] = useState('');
+
+  useEffect(() => {
+    // ... existing useEffect logic
+    // After fetching, set the editable fields
+    setPhoneNumber(userProfile.phoneNumber);
+    setWeight(userProfile.weight);
+    setAddress(userProfile.address);
+    setMedicalHistory(userProfile.medicalHistory);
+  }, [userProfile]); // Add userProfile as a dependency
 
   const handleNumericInputChange = (setterFunction, maxLength) => (event) => {
     const value = event.target.value;
@@ -31,22 +96,42 @@ export default function EditProfileUser() {
   };
 
   const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-  const diseasesPreventingDonation = [
-    'None',
-    'Hepatitis B or C',
-    'HIV/AIDS',
-    'Heart Disease',
-    'Hemochromatosis',
-    'Blood Cancers',
-    'Other'
-  ];
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    const userID = Cookies.get('userID');
+    event.preventDefault();
+
+    // Update user data
+    const { error: updateUserError } = await supabase
+      .from('users')
+      .update({ phonenumber: phoneNumber, weight, address })
+      .eq('userid', userID);
+
+    if (updateUserError) {
+      console.error('Error updating user data:', updateUserError);
+    } else {
+      // Update medical history data
+      const { error: updateMedicalError } = await supabase
+        .from('medicalhistory')
+        .update({ diseases: medicalHistory })
+        .eq('userid', userID);
+
+      if (updateMedicalError) {
+        console.error('Error updating medical history:', updateMedicalError);
+      } else {
+        console.log('Profile updated successfully');
+        navigate('/ShowProfilePage');
+      }
+    }
+  };
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col items-center p-8 space-y-8">
         <h1 className="text-2xl font-semibold text-gray-900">Edit Profile</h1>
         <div className="w-full">
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Fixed Fields */}
             <div>
                 <label className="block text-sm font-medium text-gray-700" htmlFor="user-id">User ID</label>
@@ -54,7 +139,7 @@ export default function EditProfileUser() {
                 className="mt-1 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md"
                 id="user-id"
                 type="text"
-                value={userProfile.userId}
+                value={userProfile.userID}
                 disabled
                 />
             </div>
@@ -87,9 +172,9 @@ export default function EditProfileUser() {
                 <input
                   type="tel"
                   className="mt-1 block w-full px-3 py-2 border-2 border-black bg-gray-200 text-gray-700 rounded-md"
-                  id="phone-number"
+                  id="phonenumber"
                   value={phoneNumber}
-                  onChange={handleNumericInputChange(setPhoneNumber, 10)}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
@@ -160,28 +245,12 @@ export default function EditProfileUser() {
 
             <div>
                 <label className="block text-sm font-medium text-gray-700" htmlFor="medical-history">Medical History</label>
-                <select
+                <textarea
                   id="medical-history"
                   className="mt-1 block w-full px-3 py-2 border-2 border-black bg-gray-200 text-gray-700 rounded-md"
                   value={medicalHistory}
                   onChange={(e) => setMedicalHistory(e.target.value)}
-                >
-                  {diseasesPreventingDonation.map((disease) => (
-                    <option key={disease} value={disease}>
-                      {disease}
-                    </option>
-                  ))}
-                </select>
-                {medicalHistory === 'Other' && (
-                    <textarea
-                      className="mt-4 block w-full px-3 py-2 bg-gray-200 text-gray-700 rounded-md resize-none"
-                      id="other-medical-history"
-                      rows={3}
-                      value={otherMedicalHistory}
-                      onChange={(e) => setOtherMedicalHistory(e.target.value)}
-                      placeholder="Please specify your medical condition"
-                    />
-                )}
+                />
             </div>
 
           {/* Button Container */}
@@ -197,13 +266,13 @@ export default function EditProfileUser() {
             </a>
 
             {/* Update Profile Button */}
-            <a
+            <button
               type="submit"
               className="bg-[#5f7fbf] text-white font-bold py-2 px-4 rounded cursor-pointer hover:bg-[#3e60a3] transition-all duration-700 min-w-[170px] text-center"
               href="ShowProfilePage"
             >
               Save Changes
-            </a>
+            </button>
 
           </div>
 

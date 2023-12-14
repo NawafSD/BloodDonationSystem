@@ -21,6 +21,7 @@ import {
   faLocationDot,
   faRoad,
   faHashtag,
+  faVirus,
 } from "@fortawesome/free-solid-svg-icons";
 
 // import { createSupabaseBrowser } from "../utils/supabase.ts";
@@ -35,31 +36,13 @@ const bloodTypes = [
   { id: "blood-type-ab", label: "-AB" },
 ];
 
-const userStatusOptions = [
-  { id: "option1", label: "Donor" },
-  { id: "option2", label: "Recepient" },
-];
-
-const diseaseItems = [
-  { id: "disease1", label: "Allergies" },
-  { id: "disease2", label: "Asthma" },
-  { id: "disease3", label: "Bleeding Conditions" },
-  { id: "disease4", label: "High Blood Pressure" },
-  { id: "disease5", label: "Cancer" },
-  { id: "disease6", label: "Chronic Illnesses" },
-  { id: "disease7", label: "Hepatitis/Jaundice" },
-  { id: "disease8", label: "HIV/AIDS" },
-  { id: "disease9", label: "Malaria" },
-  { id: "disease10", label: "Nothing" },
-];
-
 const ShowIcon = () => <FontAwesomeIcon icon={faEye} />;
 const HideIcon = () => <FontAwesomeIcon icon={faEyeSlash} />;
 const MAX_STEPS = 5;
 
 const SignUp = () => {
   const [selectedBloodType, setSelectedBloodType] = useState("");
-  const [selectedDiseases, setSelectedDiseases] = useState("");
+  const [diseases, setDiseases] = useState("");
   const [diseaseFree, setDiseaseFree] = useState<boolean>(false);
   const [id, setId] = useState("");
   const [name, setName] = useState("");
@@ -113,14 +96,11 @@ const SignUp = () => {
      const handleBloodTypeSelect = (bloodType: string) => {
       setSelectedBloodType(bloodType);
      }
-
-     const handleDiseasesSelect = (diseases: Set<string>) => {
-      const diseasesArray = Array.from(diseases);
-      if (diseasesArray[0] == "Nothing") {
+    
+     const isDiseaseFree = (diseases: string) => {
+      if (diseases == "None") {
         setDiseaseFree(true)
       }
-      const diseasesString = diseasesArray.join(", ");
-      setSelectedDiseases(diseasesString);
      }
   
      const handleSignUp = async () => {
@@ -148,8 +128,8 @@ const SignUp = () => {
         .from('medicalhistory')
         .insert([{
           userid: id,
-          diseasesfree: diseaseFree,
-          details: selectedDiseases
+          diseasesfree: isDiseaseFree(diseases),
+          diseases
       }])
 
       if (medicalHistoryInsertError) {
@@ -462,9 +442,22 @@ const SignUp = () => {
                 <DefaultMenu items={bloodTypes} onSelect={handleBloodTypeSelect}/>
 
                 <label className="px-1 mt-4 mb-2 text-xs font-semibold">
-                  Diseases
+                  Disease(s)
                 </label>
-                <MenuWithCheckbox items={diseaseItems} onSelect={handleDiseasesSelect}/>
+                <div className="flex">
+                  <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none">
+                    <i className="text-lg text-gray-400 mdi mdi-email-outline">
+                      <FontAwesomeIcon icon={faVirus} />
+                    </i>
+                  </div>
+                </div>
+                <input
+                  type="text"
+                  value={diseases}
+                  onChange={(e) => setDiseases(e.target.value)}
+                  className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none focus:border-[#5f7fbf]"
+                  placeholder="Enter your diseases(s), write 'None' for no diseases"
+                />
               </section>
             )}
 

@@ -1,36 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import { useUserContext } from '../config/UserContext.jsx';
-import OperationsHistory from '../components/OperationsHistory'; 
+import OperationsHistory from '../components/OperationsHistory';
+import { supabase } from '../../supabaseClient.js';
+import Cookies from 'js-cookie';
+
 
 const ShowProfile = () => {
-  // Example user profile data
-  const userProfile = {
-    userId: '1112223334',
-    name: 'Abdullah Mohammed',
-    email: 'Abdullah2@gmail.com',
-    phoneNumber: '557592000',
-    bloodType: 'A+',
-    dateOfBirth: '1990-01-01',
-    age: '33',
-    weight: '70',
-    address: '123 Main Street',
-    medicalHistory: 'None',
-    otherMedicalHistory: ''
-  };
+ // Initialize state
+  const [userProfile, setUserProfile] = useState({
+    userID: 0,
+    name: '',
+    email: '',
+    phoneNumber: '',
+    bloodType: '',
+    dateOfBirth: '',
+    age: 0,
+    weight: 0,
+    address: '',
+    medicalHistory: '',
+  });
 
-  // Initialize state with the example user profile data
-  const { userID, setUserID } = useUserContext();
-  const [userId] = useState(userID)
-  const [name] = useState(userProfile.name);
-  const [email] = useState(userProfile.email);
-  const [phoneNumber] = useState(userProfile.phoneNumber);
-  const [bloodType] = useState(userProfile.bloodType);
-  const [dateOfBirth] = useState(userProfile.dateOfBirth);
-  const [age] = useState(userProfile.age);
-  const [weight] = useState(userProfile.weight);
-  const [address] = useState(userProfile.address);
-  const [medicalHistory] = useState(userProfile.medicalHistory);
-  const [otherMedicalHistory] = useState(userProfile.otherMedicalHistory);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userID = Cookies.get('userID');
+      console.log(userID)
+
+      // Fetch user data
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('userid', userID)
+        .single();
+
+      if (userError) console.error(userError);
+      else {
+        // Fetch medical history data
+        const { data: medicalData, error: medicalError } = await supabase
+          .from('medicalhistory')
+          .select('*')
+          .eq('userid', userID)
+          .single();
+
+        if (medicalError) console.error(medicalError);
+        else {
+          // Calculate age
+          const age = calculateAge(userData.dateofbirth);
+
+          // Update state
+          setUserProfile({
+            userID,
+            name: userData.name,
+            email: userData.email,
+            phoneNumber: userData.phonenumber,
+            bloodType: userData.bloodtype,
+            dateOfBirth: userData.dateofbirth,
+            age,
+            weight: userData.weight,
+            address: userData.address,
+            medicalHistory: medicalData.diseases
+          });
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Helper function to calculate age
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const difference = Date.now() - birthDate.getTime();
+    const ageDate = new Date(difference);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
 
 
   return (
@@ -47,7 +88,7 @@ const ShowProfile = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700">User ID</label>
               <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                {userId}
+                {userProfile.userID}
               </div>
             </div>
 
@@ -55,7 +96,7 @@ const ShowProfile = () => {
                <div>
               <label className="block text-sm font-medium text-gray-700">Name</label>
               <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                {name}
+                {userProfile.name}
               </div>
             </div>
 
@@ -64,7 +105,7 @@ const ShowProfile = () => {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700">Email</label>
                 <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {email}
+                  {userProfile.email}
                 </div>
               </div>
               <div className="flex-1">
@@ -74,7 +115,7 @@ const ShowProfile = () => {
               +966
             </span>
             <div className="flex-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-none rounded-r-md">
-              {phoneNumber}
+              {userProfile.phoneNumber}
             </div>
           </div>
         </div>
@@ -85,13 +126,13 @@ const ShowProfile = () => {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700">Blood Type</label>
                 <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {bloodType}
+                  {userProfile.bloodType}
                 </div>
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
                 <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {weight}
+                  {userProfile.weight}
                 </div>
               </div>
             </div>
@@ -101,13 +142,13 @@ const ShowProfile = () => {
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
                 <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {dateOfBirth}
+                  {userProfile.dateOfBirth}
                 </div>
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium text-gray-700">Age</label>
                 <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {age}
+                  {userProfile.age}
                 </div>
               </div>
             </div>
@@ -116,7 +157,7 @@ const ShowProfile = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700">Address</label>
               <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                {address}
+                {userProfile.address}
               </div>
             </div>
 
@@ -124,11 +165,10 @@ const ShowProfile = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700">Medical History</label>
               <div className="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                {medicalHistory}
+                {userProfile.medicalHistory}
               </div>
-              {medicalHistory === 'Other' && (
+              {userProfile.medicalHistory === 'Other' && (
                 <div className="mt-4 block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md">
-                  {otherMedicalHistory}
                 </div>
               )}
             </div>

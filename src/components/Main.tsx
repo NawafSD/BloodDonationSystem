@@ -1,7 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faSliders } from "@fortawesome/free-solid-svg-icons";
-import { useUserContext } from '../config/UserContext';
 import { useState } from "react";
+import Cookies from 'js-cookie';
+
 
 type DonationEvent = {
   id: number;
@@ -15,8 +16,8 @@ type DonationEvent = {
 };
 
 const Main = () => {
-  const { userID, setUserID } = useUserContext();
-  console.log(userID);
+  const userID = Cookies.get('userID');
+
   const DonationEvents: DonationEvent[] = [
     {
       id: 1,
