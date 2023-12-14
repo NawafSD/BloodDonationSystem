@@ -1,6 +1,44 @@
+import React, { useState, useEffect } from 'react';
 import TableWithStripedRows from "./UI/TableWithStripedRowsProps";
+import { supabase } from '../../supabaseClient.js'; // Adjust the path as needed
 
 export default function BloodDonationsReport() {
+  const [donations, setDonations] = useState([]);
+
+  useEffect(() => {
+    const fetchDonations = async () => {
+      // Perform a join operation between 'notifications' and 'users' tables
+      let { data, error } = await supabase
+        .from('notifications')
+        .select(`
+          notification_id,
+          userid,
+          type,
+          from,
+          date
+        `) // Assuming 'users' is the name of the table containing user names
+         // Modify as per your table's schema
+        .order('date', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching donations:', error);
+        return;
+      }
+
+      // Transform data to match table format
+      const transformedData = data.map(item => ({
+        NotificationID: item.notification_id,
+        ID: item.userid,
+        Name: item.from, // Name is fetched from the joined 'users' table
+        ReceivedDate: item.date
+      })); 
+
+      setDonations(transformedData);
+    };
+
+    fetchDonations();
+  }, []);
+
   return (
     <main className="bg-[#f7f7f7] min-h-screen w-full flex flex-col items-center justify-center">
       <div className="mb-24">
@@ -10,17 +48,8 @@ export default function BloodDonationsReport() {
       </div>
       <div className="w-2/3">
         <TableWithStripedRows
-          headers={["ID", "Name", "Received Date"]}
-          rows={[
-            { ID: "123456789", Name: "Hassan", ReceivedDate: "02/01/2023" },
-            { ID: "112345678", Name: "Ali", ReceivedDate: "14/01/2023" },
-            { ID: "123456567", Name: "Hussain", ReceivedDate: "08/01/2023" },
-            { ID: "312341234", Name: "Abdullah", ReceivedDate: "06/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-            { ID: "231234123", Name: "Lutfi", ReceivedDate: "16/01/2023" },
-          ]}
+          headers={["Notification ID", "Recipient ID", "Donator", "Received Date"]}
+          rows={donations}
         />
       </div>
     </main>

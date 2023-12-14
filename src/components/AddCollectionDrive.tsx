@@ -35,7 +35,6 @@ export default function AddCollectionDrive() {
     const {data: userInsertData, error: userInsertError} = await supabase
       .from("blooddrives")
       .insert([{
-        bankid: null,
         title,
         location,
         start_date: startDate,

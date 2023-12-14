@@ -3,16 +3,38 @@ import Cookies from 'js-cookie';
 import { supabase } from '../../supabaseClient.js';
 
 export default function ProcessRequest() {
-  const [events] = useState([
-    { id: 'event1', name: 'Annual Blood Drive' },
-    { id: 'event2', name: 'Community Blood Donation' },
-  ]);
+  const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
   const [recipientIdInput, setRecipientIdInput] = useState('');
   const [recipientData, setRecipientData] = useState({ id: '', name: '', bloodType: '' });
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [cost, setCost] = useState('');
+  const [donatedAmount, setDonatedAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('blooddrives')
+          .select('title');
+
+        if (error) throw error;
+
+        setEvents(data.map((event) => ({
+          id: event.title,
+          name: event.title
+        })));
+      } catch (error) {
+        console.error('Error fetching events:', error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
 // Fetch recipient's details based on ID
   const fetchRecipientDetails = async () => {
@@ -62,6 +84,10 @@ export default function ProcessRequest() {
 
   const handleCostChange = (event) => {
     setCost(event.target.value);
+  };
+
+  const handleQuantityChange = (event) => {
+    setDonatedAmount(event.target.value);
   };
 
    // Submit handler
@@ -179,7 +205,20 @@ export default function ProcessRequest() {
               required
             />
           </div>
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Donated Amount (Liters)
+            </label>
+            <input
+              type="text"
+              value={donatedAmount}
+              onChange={handleQuantityChange}
+              className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-200 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter amount in liters"
+              required
+            />
           </div>
+        </div>
 
           <div className="flex items-center justify-center">
             <button
@@ -194,4 +233,4 @@ export default function ProcessRequest() {
     </div>
   );
 
-              };
+};
