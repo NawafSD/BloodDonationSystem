@@ -11,9 +11,8 @@ export default function BloodDonationsReport() {
       let { data, error } = await supabase
         .from('donations')
         .select(`
-          notification_id,
+          donation_id,
           userid,
-          type,
           from,
           date
         `) // Assuming 'users' is the name of the table containing user names
@@ -27,7 +26,7 @@ export default function BloodDonationsReport() {
 
       // Transform data to match table format
       const transformedData = data.map(item => ({
-        NotificationID: item.notification_id,
+        DonationID: item.donation_id,
         ID: item.userid,
         Name: item.from, // Name is fetched from the joined 'users' table
         ReceivedDate: item.date
@@ -48,7 +47,7 @@ export default function BloodDonationsReport() {
       </div>
       <div className="w-2/3">
         <TableWithStripedRows
-          headers={["Notification ID", "Recipient ID", "Donator", "Received Date"]}
+          headers={["Donation ID", "Recipient ID", "Donator", "Received Date"]}
           rows={donations}
         />
       </div>

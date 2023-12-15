@@ -1,37 +1,82 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faEdit, faHistory, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { supabase } from '../../supabaseClient.js'; // Make sure you have the correct path
+import Cookies from 'js-cookie';
+
 
 export default function UsersEdit() {
-    const initialUsers = [
-        { id: '1234567890', name: 'Aaron Smith' },
-        { id: '2345678901', name: 'Brenda Johnson' },
-        { id: '3456789012', name: 'Charles Brown' },
-        { id: '4567890123', name: 'Diana Williams' },
-        { id: '5678901234', name: 'Edward Jones' },
-        { id: '6789012345', name: 'Fiona White' },
-        { id: '7890123456', name: 'George Harris' },
-        { id: '8901234567', name: 'Hannah Martin' },
-        { id: '9012345678', name: 'Isaac Clark' },
-        { id: '0123456789', name: 'Jennifer Lewis' },
-        { id: '9012345678', name: 'Hassan Alabdulal' },
-        { id: '0123456789', name: 'Abdullah Al Matawah' },
-    ].sort((a, b) => a.name.localeCompare(b.name));
-
-    const [users, setUsers] = useState(initialUsers);
+    const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const { data, error } = await supabase
+                .from('users')
+                .select('userid, name');
+
+            if (error) {
+                console.error('Error fetching users:', error);
+                return;
+            }
+
+            // Transform data to match the expected structure
+            const transformedData = data.map(item => ({
+                id: item.userid,
+                name: item.name
+            }));
+
+            setUsers(transformedData);
+        };
+
+        fetchUsers();
+    }, []);
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    const handleRemoveUser = (userId) => {
-        setUsers(users.filter(user => user.id !== userId));
+    const handleRemoveUser = async (userId) => {
+        try {
+            // Delete related records from each referencing table
+            await Promise.all([
+                supabase.from('donations').delete().eq('userid', userId),
+                supabase.from('donors').delete().eq('userid', userId),
+                supabase.from('recipients').delete().eq('userid', userId),
+                supabase.from('medicalhistory').delete().eq('userid', userId),
+                // Add similar lines for each table that references 'userid'
+            ]);
+    
+            // Then delete the user from the 'users' table
+            const { error } = await supabase.from('users').delete().eq('userid', userId);
+    
+            if (error) throw error;
+    
+            // Update local state to reflect the change
+            setUsers(users.filter(user => user.id !== userId));
+        } catch (error) {
+            console.error('Error removing user:', error);
+        }
     };
+    
+    
 
     const filteredUsers = users.filter(user => 
-        user.id.includes(searchTerm) || user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        user.id.toString().includes(searchTerm) || 
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleEdit = (userId) => {
+        Cookies.set('userID', userId);
+        window.location.href = 'EditProfileUserPage'; // Update with the correct path
+    };
+    
+    const handleHistory = (userId) => {
+        Cookies.set('userID', userId);
+        window.location.href = 'OperationsHistoryPage'; // Update with the correct path
+    };
+    
+    
 
     return (
       <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">
@@ -92,16 +137,16 @@ export default function UsersEdit() {
                                 <div className="flex justify-center space-x-2">
 
                                       {/* History Anchor */}
-                                      <a href="OperationsHistoryPage" className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                                      <button onClick={() => handleHistory(user.id)} className="bg-black hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
                                         <FontAwesomeIcon icon={faHistory} className="mr-2" />
                                         History
-                                    </a>
+                                    </button>
 
                                     {/* Edit Anchor */}
-                                    <a href="EditProfileAdminPage" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                                    <button onClick={() => handleEdit(user.id)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
                                         <FontAwesomeIcon icon={faEdit} className="mr-2" />
                                         Edit
-                                    </a>
+                                    </button>
 
                                     {/* Remove Button */}
                                     <button 

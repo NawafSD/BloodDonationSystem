@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { supabase } from '../../supabaseClient.js';
 
 export default function ProcessRequest() {
+  const [receiver, setReceiver] = useState('');
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
   const [recipientIdInput, setRecipientIdInput] = useState('');
@@ -54,6 +55,8 @@ export default function ProcessRequest() {
         name: data.name,
         bloodType: data.bloodtype,
       });
+      setReceiver(data.name);
+
     } catch (error) {
       console.error('Error fetching recipient details:', error.message);
     } finally {
@@ -119,12 +122,37 @@ const handleSubmit = async (event) => {
     const donationData = {
       blooddriveid: blooddriveData.blooddriveid,
       userid: recipientIdInput,
-      type: 'Request for Donate',
       from: requesterData.name,
       date: new Date().toISOString().split('T')[0],
       cost,
       donatedamount: donatedAmount
     };
+
+    // New code to insert data into the 'donors' table
+    const { error: donorError } = await supabase
+      .from('donors')
+      .insert([{
+        blooddriveid: blooddriveData.blooddriveid,
+        userid: requesterID,
+        donator: requesterData.name,
+        donating_date: new Date().toISOString().split('T')[0],
+        quantity: donatedAmount
+      }]);
+
+    if (donorError) throw donorError;
+
+    // New code to insert data into the 'recipients' table
+    const { error: recipientError } = await supabase
+      .from('recipients')
+      .insert([{
+        blooddriveid: blooddriveData.blooddriveid,
+        userid: recipientIdInput,
+        receiver,
+        receiving_date: new Date().toISOString().split('T')[0],
+        quantity: donatedAmount
+      }]);
+
+    if (recipientError) throw recipientError;
 
     // Insert data into the donations table
     const { error: donationError } = await supabase
@@ -135,6 +163,8 @@ const handleSubmit = async (event) => {
 
     console.log('Request submitted successfully');
     // Reset form or navigate to another page
+
+
 
   } catch (error) {
     console.error('Error processing request:', error.message);

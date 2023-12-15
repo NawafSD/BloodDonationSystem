@@ -33,7 +33,7 @@ const SignIn = () => {
     // Update isAdmin state based on the isadmin field from the database
     setIsAdmin(data.isadmin);
     Cookies.set('userID', data.userid, { expires: 1, path: '/' }); // Expires in 1 day
-    navigate('/MainPage');
+    navigate('/');
 
     }
   else {

@@ -1,10 +1,31 @@
+import React, { useEffect, useState } from 'react';
 import TableWithStripedRows from "./UI/TableWithStripedRowsProps";
+import { supabase } from '../../supabaseClient.js';
 
 export default function PaymentsReport() {
+  const [payments, setPayments] = useState([]);
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      const { data, error } = await supabase
+        .from('payments')
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching payments:', error);
+        return;
+      }
+
+      setPayments(data);
+    };
+
+    fetchPayments();
+  }, []);
+
   return (
     <main className="bg-[#f7f7f7] min-h-screen w-full flex flex-col items-center justify-center">
       <div className="mb-24">
-        <h1 className=" tracking-tight text-center font-roboto text-[#121212] mb-8 text-4xl font-extrabold leading-tight lg:text-5xl ">
+        <h1 className="tracking-tight text-center font-roboto text-[#121212] mb-8 text-4xl font-extrabold leading-tight lg:text-5xl">
           All Payments that have been confirmed as completed
         </h1>
       </div>
@@ -16,38 +37,12 @@ export default function PaymentsReport() {
             "Amount (USD)",
             "Confirmation Date",
           ]}
-          rows={[
-            {
-              PaymentID: "PY001",
-              PayerName: "John Doe",
-              Amount: "150.00",
-              ConfirmationDate: "2023-01-12",
-            },
-            {
-              PaymentID: "PY002",
-              PayerName: "Jane Smith",
-              Amount: "200.00",
-              ConfirmationDate: "2023-01-15",
-            },
-            {
-              PaymentID: "PY003",
-              PayerName: "Bob Johnson",
-              Amount: "350.00",
-              ConfirmationDate: "2023-02-01",
-            },
-            {
-              PaymentID: "PY004",
-              PayerName: "Alice Brown",
-              Amount: "125.00",
-              ConfirmationDate: "2023-02-05",
-            },
-            {
-              PaymentID: "PY005",
-              PayerName: "Charlie Davis",
-              Amount: "500.00",
-              ConfirmationDate: "2023-02-20",
-            },
-          ]}
+          rows={payments.map(payment => ({
+            PaymentID: payment.paymentid,
+            RecipientName: payment.recipientname,
+            Amount: payment.amount,
+            ConfirmationDate: payment.confirmationdate
+          }))}
         />
       </div>
     </main>
