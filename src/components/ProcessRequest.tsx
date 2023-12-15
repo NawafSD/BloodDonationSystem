@@ -90,42 +90,59 @@ export default function ProcessRequest() {
     setDonatedAmount(event.target.value);
   };
 
-   // Submit handler
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+  // Submit handler
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setIsLoading(true);
 
+  try {
     // Fetch requester's name
     const requesterID = Cookies.get('userID');
-    const { data: requesterData } = await supabase
+    const { data: requesterData, error: requesterError } = await supabase
       .from('users')
       .select('name')
       .eq('userid', requesterID)
       .single();
 
-    // Prepare data for the notifications table
-    const notificationData = {
+    if (requesterError) throw requesterError;
+
+    // Find the blooddriveid matching the selected event title
+    const { data: blooddriveData, error: blooddriveError } = await supabase
+      .from('blooddrives')
+      .select('blooddriveid')
+      .eq('title', selectedEvent)
+      .single();
+
+    if (blooddriveError) throw blooddriveError;
+
+    // Prepare data for the donations table
+    const donationData = {
+      blooddriveid: blooddriveData.blooddriveid,
       userid: recipientIdInput,
       type: 'Request for Donate',
       from: requesterData.name,
       date: new Date().toISOString().split('T')[0],
       cost,
+      donatedamount: donatedAmount
     };
 
-    // Insert data into the notifications table
-    const { error } = await supabase
-      .from('notifications')
-      .insert([notificationData]);
+    // Insert data into the donations table
+    const { error: donationError } = await supabase
+      .from('donations')
+      .insert([donationData]);
 
-    if (error) {
-      console.error('Error submitting request:', error.message);
-    } else {
-      console.log('Request submitted successfully');
-      // Reset form or navigate to another page
-    }
+    if (donationError) throw donationError;
 
+    console.log('Request submitted successfully');
+    // Reset form or navigate to another page
+
+  } catch (error) {
+    console.error('Error processing request:', error.message);
+  } finally {
     setIsLoading(false);
-  };
+  }
+};
+
 
   // ... existing return statement
   return (

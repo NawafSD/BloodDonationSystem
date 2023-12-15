@@ -17,7 +17,7 @@ type DonationEvent = {
 
 const Main = () => {
   const userID = Cookies.get('userID');
-
+  
   const DonationEvents: DonationEvent[] = [
     {
       id: 1,

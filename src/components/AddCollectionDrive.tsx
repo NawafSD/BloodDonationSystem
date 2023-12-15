@@ -38,7 +38,8 @@ export default function AddCollectionDrive() {
         title,
         location,
         start_date: startDate,
-        end_date: endDate
+        end_date: endDate,
+        totaldonations: 0
       }])
 
       if (userInsertError) {

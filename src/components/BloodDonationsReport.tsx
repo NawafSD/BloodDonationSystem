@@ -9,7 +9,7 @@ export default function BloodDonationsReport() {
     const fetchDonations = async () => {
       // Perform a join operation between 'notifications' and 'users' tables
       let { data, error } = await supabase
-        .from('notifications')
+        .from('donations')
         .select(`
           notification_id,
           userid,
