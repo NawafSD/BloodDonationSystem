@@ -38,20 +38,38 @@ export default function Notification() {
 
   const handlePay = async (notification) => {
     try {
+      const userID = Cookies.get('userID');
+      if (!userID) throw new Error("User ID not found");
+  
+      // Fetch the user's name from the 'users' table
+      let { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('name')
+        .eq('userid', userID)
+        .single();
+  
+      if (userError) throw userError;
+      if (!userData) throw new Error("User not found");
+  
+      const recipientName = userData.name;
+  
+      // Proceed with the existing payment insertion
       const { error } = await supabase
-          .from('payments')
-          .insert([{
-              recipientname: notification.from,
-              amount: notification.cost,
-              confirmationdate: notification.date
-          }]);
-
+        .from('payments')
+        .insert([{
+            recipientname: recipientName,
+            amount: notification.cost,
+            confirmationdate: notification.date
+        }]);
+  
       if (error) throw error;
-      window.location.href = '/PaymentPage';  // Modify the URL as needed
+  
+      window.location.href = '/PaymentPage'; // Modify the URL as needed
     } catch (error) {
       console.error('Error processing payment:', error);
     }
   };
+  
 
   return (
     <div className="bg-[#f7f7f7] pt-16 flex flex-col items-center min-h-screen font-roboto">

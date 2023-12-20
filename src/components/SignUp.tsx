@@ -96,14 +96,10 @@ const SignUp = () => {
      const handleBloodTypeSelect = (bloodType: string) => {
       setSelectedBloodType(bloodType);
      }
-    
-     const isDiseaseFree = (diseases: string) => {
-      if (diseases == "None") {
-        setDiseaseFree(true)
-      }
-     }
   
      const handleSignUp = async () => {
+      // Determine if the user is disease-free
+      const diseasesFree = diseases.trim().toLowerCase() === "none";
       const {data: userInsertData, error: userInsertError} = await supabase
         .from("users")
         .insert([{
@@ -128,7 +124,7 @@ const SignUp = () => {
         .from('medicalhistory')
         .insert([{
           userid: id,
-          diseasesfree: isDiseaseFree(diseases),
+          diseasesfree: diseasesFree,
           diseases
       }])
 
