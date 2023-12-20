@@ -37,6 +37,7 @@ export default function AddCollectionDrive() {
       .insert([{
         title,
         location,
+        bankId: 1,
         start_date: startDate,
         end_date: endDate,
         totaldonations: 0
