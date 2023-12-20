@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../supabaseClient.js'; // Adjust the path as necessary
+import { supabase } from '../../supabaseClient.js'; 
 import TableWithStripedRows from "./UI/TableWithStripedRowsProps";
 
 export default function AggregatedAmountReport() {
@@ -9,7 +9,7 @@ export default function AggregatedAmountReport() {
     const fetchDriveDetails = async () => {
       try {
         let { data, error } = await supabase
-          .rpc('get_drive_bloodtype_amounts'); // This should be the name of your stored procedure
+          .rpc('get_drive_bloodtype_amounts');
 
         if (error) {
           throw error;

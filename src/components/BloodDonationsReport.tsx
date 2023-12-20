@@ -7,7 +7,7 @@ export default function BloodDonationsReport() {
 
   useEffect(() => {
     const fetchDonations = async () => {
-      // Perform a join operation between 'notifications' and 'users' tables
+      // Perform a join operation between 'donations' and 'users' tables
       let { data, error } = await supabase
         .from('donations')
         .select(`
@@ -16,7 +16,7 @@ export default function BloodDonationsReport() {
           from,
           date
         `) // Assuming 'users' is the name of the table containing user names
-         // Modify as per your table's schema
+         
         .order('date', { ascending: false });
 
       if (error) {
@@ -28,7 +28,7 @@ export default function BloodDonationsReport() {
       const transformedData = data.map(item => ({
         DonationID: item.donation_id,
         ID: item.userid,
-        Name: item.from, // Name is fetched from the joined 'users' table
+        Name: item.from, 
         ReceivedDate: item.date
       })); 
 
